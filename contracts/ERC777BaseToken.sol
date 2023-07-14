@@ -45,27 +45,27 @@ contract ERC777BaseToken is ERC777Token, ERC1820Client {
         mDefaultOperators = _defaultOperators;
         for (uint256 i = 0; i < mDefaultOperators.length; i++) { mIsDefaultOperator[mDefaultOperators[i]] = true; }
 
-        setInterfaceImplementation("ERC777Token", address(this));
+        // setInterfaceImplementation("ERC777Token", address(this));
     }
 
     /* -- ERC777 Interface Implementation -- */
     //
     /// @return the name of the token
-    function name() public view returns (string memory) { return mName; }
+    function name() public view virtual returns (string memory) { return mName; }
 
     /// @return the symbol of the token
-    function symbol() public view returns (string memory) { return mSymbol; }
+    function symbol() public view virtual returns (string memory) { return mSymbol; }
 
     /// @return the granularity of the token
     function granularity() public view returns (uint256) { return mGranularity; }
 
     /// @return the total supply of the token
-    function totalSupply() public view returns (uint256) { return mTotalSupply; }
+    function totalSupply() public view virtual returns (uint256) { return mTotalSupply; }
 
     /// @notice Return the account balance of some account
     /// @param _tokenHolder Address for which the balance is returned
     /// @return the balance of `_tokenAddress`.
-    function balanceOf(address _tokenHolder) public view returns (uint256) { return mBalances[_tokenHolder]; }
+    function balanceOf(address _tokenHolder) public view  virtual returns (uint256) { return mBalances[_tokenHolder]; }
 
     /// @notice Return the list of default operators
     /// @return the list of all the default operators
@@ -131,7 +131,7 @@ contract ERC777BaseToken is ERC777Token, ERC1820Client {
         doSend(msg.sender, _from, _to, _amount, _data, _operatorData, true);
     }
 
-    function burn(uint256 _amount, bytes calldata _data) external {
+    function burn(uint256 _amount, bytes calldata _data) external virtual{
         doBurn(msg.sender, msg.sender, _amount, _data, "");
     }
 
@@ -141,7 +141,7 @@ contract ERC777BaseToken is ERC777Token, ERC1820Client {
         bytes calldata _data,
         bytes calldata _operatorData
     )
-        external
+        external virtual override
     {
         require(isOperatorFor(msg.sender, _tokenHolder), "Not an operator");
         doBurn(msg.sender, _tokenHolder, _amount, _data, _operatorData);
@@ -185,7 +185,7 @@ contract ERC777BaseToken is ERC777Token, ERC1820Client {
         bytes memory _operatorData,
         bool _preventLocking
     )
-        internal
+        internal virtual
     {
         requireMultiple(_amount);
 
@@ -215,7 +215,7 @@ contract ERC777BaseToken is ERC777Token, ERC1820Client {
         bytes memory _data,
         bytes memory _operatorData
     )
-        internal
+        internal virtual
     {
         callSender(_operator, _tokenHolder, address(0), _amount, _data, _operatorData);
 
