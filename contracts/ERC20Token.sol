@@ -6,7 +6,7 @@
  * Do not use or deploy this code before reviewing it personally first.
  */
 // solhint-disable-next-line compiler-fixed
-pragma solidity ^0.5.3;
+pragma solidity ^0.8.0;
 
 
 interface ERC20Token {
