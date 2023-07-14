@@ -34,7 +34,7 @@ contract ExampleTokensSender is ERC1820Client, /*ERC1820ImplementerInterface,*/ 
     mapping(address => bytes) public operatorData;
     mapping(address => uint256) public balanceOf;
 
-    constructor(bool _setInterface) public {
+    constructor(bool _setInterface)  {
         if (_setInterface) { setInterfaceImplementation("ERC777TokensSender", address(this)); }
         allowTokensToSend = true;
     }
