@@ -1,16 +1,20 @@
 
+const zeroAddress = "0x0000000000000000000000000000000000000000"
+const args =
+[
+   "_name",
+   "_symbol",
+    1,
+  [] ,
+  zeroAddress ,
+  1000000000
+]
 async function main() {
-
-  const lock = await hre.ethers.deployContract("Lock", [unlockTime], {
-    value: lockedAmount,
-  });
-
-  await lock.waitForDeployment();
+  const token = await hre.ethers.deployContract("ReferenceToken",args);
+  await token.waitForDeployment();
 
   console.log(
-    `Lock with ${ethers.formatEther(
-      lockedAmount
-    )}ETH and unlock timestamp ${unlockTime} deployed to ${lock.target}`
+    `token deployed to ${token.address}`
   );
 }
 
