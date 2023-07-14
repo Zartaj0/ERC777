@@ -31,7 +31,7 @@ contract ReferenceToken is ERC777ERC20BaseToken, Ownable {
         address _burnOperator,
         uint256 _initialSupply
     )
-        public ERC777ERC20BaseToken(_name, _symbol, _granularity, _defaultOperators)
+         ERC777ERC20BaseToken(_name, _symbol, _granularity, _defaultOperators)
     {
         mBurnOperator = _burnOperator;
         doMint(msg.sender, _initialSupply, "", "");
@@ -76,7 +76,7 @@ contract ReferenceToken is ERC777ERC20BaseToken, Ownable {
     ///  Do not forget to override the `burn` function in your token contract if you want to prevent users from
     ///  burning their tokens.
     /// @param _amount The quantity of tokens to burn
-    function burn(uint256 _amount, bytes calldata _data) external onlyOwner {
+    function burn(uint256 _amount, bytes calldata _data) external onlyOwner virtual override {
         doBurn(msg.sender, msg.sender, _amount, _data, "");
     }
 
@@ -92,7 +92,7 @@ contract ReferenceToken is ERC777ERC20BaseToken, Ownable {
         bytes calldata _data,
         bytes calldata _operatorData
     )
-        external
+        external virtual override
     {
         require(msg.sender == mBurnOperator, "Not a burn operator");
         require(isOperatorFor(msg.sender, _tokenHolder), "Not an operator");
@@ -101,8 +101,8 @@ contract ReferenceToken is ERC777ERC20BaseToken, Ownable {
 
     function doMint(address _tokenHolder, uint256 _amount, bytes memory _data, bytes memory _operatorData) private {
         requireMultiple(_amount);
-        mTotalSupply = mTotalSupply.add(_amount);
-        mBalances[_tokenHolder] = mBalances[_tokenHolder].add(_amount);
+        mTotalSupply = mTotalSupply+(_amount);
+        mBalances[_tokenHolder] = mBalances[_tokenHolder]+(_amount);
 
         callRecipient(msg.sender, address(0), _tokenHolder, _amount, _data, _operatorData, true);
 
